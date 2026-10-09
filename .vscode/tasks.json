@@ -23,7 +23,7 @@
         },
         {
             "label": "Report",
-            "detail": "Invoke-Build Report: the run report in C:\\__Code\\Graph\\artifacts and artifacts/ here (not-run unless Build and Pester ran in the same invocation; use Invoke-Build for all three).",
+            "detail": "Invoke-Build Report: the run report in artifacts/ here, via New-GraphRunReport -Repo, never Graph's artifacts (not-run unless Build and Pester ran in the same invocation; use Invoke-Build for all three).",
             "type": "shell",
             "command": "pwsh",
             "args": ["-NoProfile", "-Command", "Invoke-Build Report"],

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 — 2026-10-08
+
+- 0.1.1: git-guard hook; run-report 0.2.2; graph-node 0.2.1
+- Skills git-guard 0.1.0 (line endings only; content was already 0.1.0), run-report 0.2.2 and graph-node 0.2.1 recopied from Graph HEAD; `.claude/settings.json` already held git-guard's PreToolUse entry. `tests/Module.Tests.ps1` checks each copy's version and full text against `git show HEAD:` in Graph; `tests/GitGuard.Tests.ps1` the hook's exit codes.
+- Copied-skill tests now compare every file in each skill folder, not only SKILL.md; GitGuard tests add gh pr merge. Report task comment and VS Code task detail: New-GraphRunReport -Repo writes this repo's artifacts only, never Graph's.
+
 ## 0.1.0 — 2026-10-09
 
 - Scaffold, laid out as Graph.Emitter.FileSystem. PowerShell module `Claude.Agent.Runner`: `Export-RunnerGraph` (`-InputPath`, `-Driver`, `-LayersPath`, `-Strict`).

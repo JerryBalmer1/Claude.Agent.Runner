@@ -1,5 +1,5 @@
 module: Claude.Agent.Runner
-version: 0.1.0
+version: 0.1.1
 kinds:
   Plan:
     description: What a run was asked to do, named by the captured stream's file name up to its first dot. A Plan contains every Run of it.

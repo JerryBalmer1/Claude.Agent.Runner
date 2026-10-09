@@ -34,8 +34,8 @@ task Pester {
     $ran.Add('Pester')
 }
 
-# The build's facts as a run report (run-report skill): Graph's New-GraphRunReport writes C:\__Code\Graph\artifacts\run-report.json
-# and a copy in this repo's artifacts\. A failed task stops the chain before Report, so Report sees only tasks that passed;
+# The build's facts as a run report (run-report skill): Graph's New-GraphRunReport -Repo writes this repo's
+# artifacts\run-report.json and nowhere else, never Graph's artifacts. A failed task stops the chain before Report, so Report sees only tasks that passed;
 # Build or Pester not run in this invocation is a NotRun and the result is not-run, never a stale pass.
 task Report {
     Import-Module C:\__Code\Graph\src\Graph\Graph.psd1 -Force

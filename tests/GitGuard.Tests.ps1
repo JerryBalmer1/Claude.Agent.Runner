@@ -1,11 +1,12 @@
 BeforeDiscovery {
-    # The six commands Graph pins the hook to (git-guard SKILL.md, "Test it by hand").
+    # The commands Graph pins the hook to (git-guard SKILL.md, "Test it by hand"), plus gh pr merge.
     $script:Commands = @(
         @{ Command = 'git status'; Code = 0 }
         @{ Command = 'git add -A'; Code = 0 }
         @{ Command = 'git commit -m x'; Code = 2 }
         @{ Command = 'git push'; Code = 2 }
         @{ Command = 'git tag v1'; Code = 2 }
+        @{ Command = 'gh pr merge 1'; Code = 2 }
         @{ Command = 'echo hi && git push'; Code = 2 }
     )
 }

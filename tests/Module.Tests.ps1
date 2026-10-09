@@ -23,8 +23,8 @@ BeforeAll {
 }
 
 Describe 'Module' {
-    It 'is version 0.1.0 and needs PowerShell 7.4' {
-        $Manifest.ModuleVersion | Should -Be '0.1.0'
+    It 'is version 0.1.1 and needs PowerShell 7.4' {
+        $Manifest.ModuleVersion | Should -Be '0.1.1'
         $Manifest.PowerShellVersion | Should -Be '7.4'
     }
 
@@ -158,13 +158,20 @@ Describe 'Copied skills (read-only here)' {
         $mine | Should -Be (Get-FrontVersion -Text $committed) -Because "recopy .claude/skills/$Skill from $Source\.claude\skills\$Skill"
     }
 
-    It '<Skill> is the full text of the committed copy in <Source>, line endings aside' -ForEach $Skills {
+    It '<Skill> is the full text of the committed copy in <Source>, every file, line endings aside' -ForEach $Skills {
         $committed = Get-CommittedText -Repo $Source -RelativePath ".claude/skills/$Skill/SKILL.md"
         if ($null -eq $committed) {
             Set-ItResult -Skipped -Because "$Source is not a git checkout with .claude/skills/$Skill committed"
             return
         }
-        $mine = (Get-Content -LiteralPath (Join-Path $RepoRoot '.claude' 'skills' $Skill 'SKILL.md')) -join "`n"
-        $mine | Should -BeExactly $committed
+        $theirs = @(& git -C $Source ls-tree -r --name-only HEAD ".claude/skills/$Skill" | Sort-Object)
+        $dir = Join-Path $RepoRoot '.claude' 'skills' $Skill
+        $mine = @(Get-ChildItem -LiteralPath $dir -Recurse -File | ForEach-Object {
+                ".claude/skills/$Skill/" + [System.IO.Path]::GetRelativePath($dir, $_.FullName).Replace('\', '/')
+            } | Sort-Object)
+        $mine | Should -Be $theirs
+        foreach ($path in $theirs) {
+            (Get-Content -LiteralPath (Join-Path $RepoRoot $path)) -join "`n" | Should -BeExactly (Get-CommittedText -Repo $Source -RelativePath $path) -Because "$path is a copy; do not edit it here"
+        }
     }
 }

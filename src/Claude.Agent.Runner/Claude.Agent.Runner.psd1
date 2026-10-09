@@ -1,6 +1,6 @@
 @{
     RootModule        = 'Claude.Agent.Runner.psm1'
-    ModuleVersion     = '0.1.0'
+    ModuleVersion     = '0.1.1'
     GUID              = '7cb3e13d-6a89-49f6-bde6-b2133627bbca'
     Author            = 'Jerry Balmer'
     CompanyName       = 'JerryBalmer1'
