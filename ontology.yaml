@@ -1,0 +1,49 @@
+module: Claude.Agent.Runner
+version: 0.1.0
+kinds:
+  Plan:
+    description: What a run was asked to do, named by the captured stream's file name up to its first dot. A Plan contains every Run of it.
+    idRule: "runner:<plan>, <plan> the input file name up to its first dot"
+    properties:
+      - { name: name, type: string, required: true }
+    display: { color: "#1A73E8", shape: hexagon, size: 3, label: "{name}" }
+  Run:
+    description: One session of an agent working a Plan, read from one captured stream by a driver. Token totals are not stored; they are the sum over its Steps at query time.
+    idRule: "<plan id>/<session id>"
+    properties:
+      - { name: sessionId, type: string, required: true }
+      - { name: driver, type: string, required: true, description: The driver folder under drivers/ that read the stream. }
+      - { name: model, type: string }
+      - { name: startedAt, type: string, description: "The first stream timestamp, UTC ending Z, whole seconds." }
+    display: { color: "#34A853", shape: square, size: 2, label: "{properties.sessionId}" }
+  Step:
+    description: One model turn of a Run - one assistant message and the tool calls it made.
+    idRule: "<run id>/step-<n>, n counting from 1 in stream order"
+    properties:
+      - { name: index, type: integer, required: true, description: "n in the id." }
+      - { name: tools, type: string, required: true, description: "Names of the tools the turn called, in order, joined by comma and space; empty for a text-only turn." }
+      - { name: metered, type: boolean, description: "Whether the turn's tokens count against a meter. Default true when absent." }
+      - { name: tokensInput, type: integer, description: Uncached input tokens the stream reported for the turn. }
+      - { name: tokensOutput, type: integer, description: Output tokens the stream reported for the turn. }
+      - { name: tokensCache, type: integer, description: Cache read plus cache creation input tokens. }
+      - { name: messageId, type: string }
+      - { name: model, type: string }
+      - { name: startedAt, type: string, description: "UTC ending Z, whole seconds." }
+      - { name: text, type: string, description: "The turn's text blocks, joined by newlines." }
+    display: { color: "#F9AB00", shape: circle, size: 1, label: "{name}" }
+edgeKinds:
+  contains:
+    description: A Plan contains each of its Runs; a Run contains each of its Steps.
+    from: [Plan, Run]
+    to: [Run, Step]
+    display: { color: "#5F6368", style: solid }
+  order:
+    description: A Step to the Step that came next in the same Run.
+    from: [Step]
+    to: [Step]
+    display: { color: "#9AA0A6", style: dotted }
+  follows:
+    description: "A Step to the agent: Rule whose prompt line directed it, owned by Graph.Emitter.Agent. Absent when the Step was improvised."
+    from: [Step]
+    to: [Rule]
+    display: { color: "#E8710A", style: dashed }

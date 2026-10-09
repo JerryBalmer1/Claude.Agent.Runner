@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "detail": "Invoke-Build Build: manifest, ontology [] and a layer of the fixture in artifacts/layers.",
+            "type": "shell",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-Command", "Invoke-Build Build"],
+            "options": { "cwd": "${workspaceFolder}" },
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": []
+        },
+        {
+            "label": "Pester",
+            "detail": "pwsh -NoProfile -File .\\tests\\Invoke-Tests.ps1",
+            "type": "shell",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-File", "${workspaceFolder}/tests/Invoke-Tests.ps1"],
+            "options": { "cwd": "${workspaceFolder}" },
+            "group": { "kind": "test", "isDefault": true },
+            "problemMatcher": []
+        },
+        {
+            "label": "Report",
+            "detail": "Invoke-Build Report: the run report in C:\\__Code\\Graph\\artifacts and artifacts/ here (not-run unless Build and Pester ran in the same invocation; use Invoke-Build for all three).",
+            "type": "shell",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-Command", "Invoke-Build Report"],
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": []
+        }
+    ]
+}
